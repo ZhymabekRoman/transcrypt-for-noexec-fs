@@ -3,7 +3,14 @@
 
 ## Steps:
 1) Clone and install `transcrypt`
-2) Execute additional steps for `git` (optional)
+2) Clone and install patches:
+```
+$ git clone https://github.com/ZhymabekRoman/transcrypt-for-noexec-fs
+$ cd transcrypt-for-noexec-fs
+# Copy transcrypt_for_noexec_fs.patch to transcrypt directory and apply:
+$ git apply transcrypt_for_noexec_fs.patch
+```
+3) Execute additional steps for `git` (optional)
 
 **Important issue: manually run the `transcrypt pre_commit` command before each commiting! Because pre-commit hooks won't execute in noexec fs**
 
