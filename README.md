@@ -2,13 +2,16 @@
 `transcrypt-for-noexec-fs` - patches for correct operation of [transcrypt](https://github.com/elasticdog/transcrypt) in file system where it is not possible to set the execution flag
 
 ## Steps:
-1) Clone and install `transcrypt`
-2) Clone and install patches:
+1) Clone `transcrypt`:
+```bash
+$ git clone https://github.com/elasticdog/transcrypt
+$ git reset --hard e08c3595e6ec57bc448e50401cb7ed845d866419
 ```
-$ git clone https://github.com/ZhymabekRoman/transcrypt-for-noexec-fs
-$ cd transcrypt-for-noexec-fs
-# Copy transcrypt_for_noexec_fs.patch to transcrypt directory and apply:
-$ git apply transcrypt_for_noexec_fs.patch
+2) Download and apply patch:
+```bash
+$ wget https://github.com/ZhymabekRoman/transcrypt-for-noexec-fs/blob/main/transcrypt_for_noexec_fs.patch?raw=True -O transcrypt_for_noexec_fs.patch
+$ git am < transcrypt_for_noexec_fs.patch
+$ rm transcrypt_for_noexec_fs.patch
 ```
 3) Execute additional steps for `git` (optional)
 

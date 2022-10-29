@@ -1,27 +1,26 @@
+From d45c8516d5efcc6ad33d01c672ac05e8e72556e3 Mon Sep 17 00:00:00 2001
+From: Zhymabek Roman <robanokssamit@yandex.ru>
+Date: Sat, 29 Oct 2022 16:40:39 +0600
+Subject: [PATCH] Fix for noexec FS
+
+---
+ transcrypt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
 diff --git a/transcrypt b/transcrypt
-index 072b1c2..15263c2 100755
+index 78fb2ce..1a2d70a 100755
 --- a/transcrypt
 +++ b/transcrypt
-@@ -529,15 +529,18 @@ save_configuration() {
- 	save_password "$password"
- 	git config transcrypt.openssl-path "$openssl_path"
+@@ -591,7 +591,8 @@ save_configuration() {
  
-+	local current_transcrypt
-+	current_transcrypt=$(realpath "$0" 2>/dev/null)
-+
  	# write the filter settings. Sorry for the horrific quote escaping below...
  	# shellcheck disable=SC2016
--	git config filter.crypt.clean '"$(git config transcrypt.crypt-dir 2>/dev/null || printf ''%s/crypt'' ""$(git rev-parse --git-dir)"")"/transcrypt clean %f'
-+	git config filter.crypt.clean "${current_transcrypt} clean %f"
- 	# shellcheck disable=SC2016
--	git config filter.crypt.smudge '"$(git config transcrypt.crypt-dir 2>/dev/null || printf ''%s/crypt'' ""$(git rev-parse --git-dir)"")"/transcrypt smudge'
-+	git config filter.crypt.smudge "${current_transcrypt} smudge %f"
- 	# shellcheck disable=SC2016
--	git config diff.crypt.textconv '"$(git config transcrypt.crypt-dir 2>/dev/null || printf ''%s/crypt'' ""$(git rev-parse --git-dir)"")"/transcrypt textconv'
-+	git config diff.crypt.textconv "${current_transcrypt} textconv"
- 	# shellcheck disable=SC2016
--	git config merge.crypt.driver '"$(git config transcrypt.crypt-dir 2>/dev/null || printf ''%s/crypt'' ""$(git rev-parse --git-dir)"")"/transcrypt merge %O %A %B %L %P'
-+	git config merge.crypt.driver "${current_transcrypt} merge %O %A %B %L %P"
- 	git config filter.crypt.required 'true'
- 	git config diff.crypt.cachetextconv 'true'
- 	git config diff.crypt.binary 'true'
+-	transcrypt_path='"$(git config transcrypt.crypt-dir 2>/dev/null || printf %s/crypt ""$(git rev-parse --git-dir)"")"/transcrypt'
++	# transcrypt_path='"$(git config transcrypt.crypt-dir 2>/dev/null || printf %s/crypt ""$(git rev-parse --git-dir)"")"/transcrypt'
++	transcrypt_path=$(realpath "$0" 2>/dev/null)
+ 
+ 	# Ensure filter attributes are always set for the default (unspecified) context
+ 	git config filter.crypt.clean "$transcrypt_path clean context=default %f"
+-- 
+2.38.1
+
